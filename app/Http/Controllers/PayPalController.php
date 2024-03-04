@@ -34,15 +34,15 @@ class PayPalController extends Controller
     }
 
     public function procesarPagoPayPal(Request $request) {
+        $totalCompra = session('totalCompra');
+        session(['totalCompra' => $request->amount]);
         try {
             $response = $this->gateway->purchase(array(
                 'amount' => $request->amount,
                 'currency' => 'MXN',
-                'returnUrl' => url('paypalSuccess', ['cant' => $request->cont]),
+                'returnUrl' => url('paypalSuccess'),
                 'cancelUrl' => url('paypalError'),
             ))->send();
-
-            session(['cantidad_pas' => $request->cont]);
 
             if($response->isRedirect()) {
                 $response->redirect();
@@ -62,22 +62,27 @@ class PayPalController extends Controller
         $userId = Auth::id();
         $usuario = User::find($userId);
         $domicilio = Domicilio::where('user',$userId )->get()->first();
-        $cantidadT = session('cantidad_pas');
+        $cantidadT = session('cantidad_prods');
         // dd($cantidadT);
+        $totalCompra = session('totalCompra');
+
 
         // $responseData = json_decode($response->getBody(), true);
         $Carrito = session('carrito');
         // dd($Carrito);
         $envio = session('envio');
+
+        // dd($usuario, $domicilio, $cantidadT, $Carrito, $envio, $totalCompra);
+
         $Pedido = new Pedido;
         // $Pedido->uid= $responseData['id'];
         $Pedido->uid= $request->PayerID;
         $Pedido->estatus= 1;
         $Pedido->domicilio= $domicilio->id;
-        $Pedido->cantidad= 1;
-        $Pedido->importe= 2;
+        $Pedido->cantidad= $cantidadT;
+        $Pedido->importe= $totalCompra;
         $Pedido->iva= 0;
-        $Pedido->total= 2;
+        $Pedido->total= $totalCompra;
         $Pedido->envio= $envio;
         $Pedido->usuario= $userId;
         $Pedido->data= json_encode($Carrito);
@@ -91,7 +96,7 @@ class PayPalController extends Controller
         // dd($Pedido);
         session()->forget('carrito');
         session()->forget('envio');
-    
+
         // return response()->json(['success' => true, 'mensaje' => $responseData]);
         return redirect()->route('pedidos');
     }

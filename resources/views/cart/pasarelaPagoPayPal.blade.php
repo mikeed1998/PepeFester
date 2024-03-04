@@ -19,7 +19,7 @@
             width: 100% !important;
         }
 
-        @media only screen and (max-width: 768px){ 
+        @media only screen and (max-width: 768px){
             .card_ini{
             top:20px;
         }
@@ -28,7 +28,7 @@
         }
         }
 
-        @media only screen and (max-width: 590px){  
+        @media only screen and (max-width: 590px){
             .tutulo_inicio{
                 font-size: 35px !important;
             }
@@ -49,8 +49,8 @@
 {{-- CONTENIDO DE LA PAGINA --}}
     @section('content')
 
-    
-    
+
+
 
 
     <div class="col-12 text-center d-flex justify-content-center align-items-center flex-column">
@@ -59,9 +59,9 @@
 
     @if($car == 1)
 
-    <div class="col-12 pb-5 d-flex justify-content-center align-items-center " style="">
-        
-                
+    <div class="col-11 pb-5 d-flex justify-content-center align-items-center mx-auto" style="">
+
+
                 <div class="col-4 card p-3 d-flex justify-content-between" style=" height: 450px; border-radius: 26px; border:none; box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.11);">
                     <div class="col-12 " style="height: 50px;">
                         <h5>Resumen de compra</h5>
@@ -109,7 +109,7 @@
                         <h5 id="" data-total-c="{{$formattedTotalPrice}}" style="font-weight: bold;">${{$formattedTotalPrice}}</h5>
                     </div>
                     <div class="col-12" style="height: 50px;">
-                    
+
                         <input id="token_card" type="text" name="token_card" value="" hidden>
                         <input id="cant_prods_t" type="text" name="cant_prods" value="{{$cantidad_prods}}" hidden>
                         <input id="total_price" type="text" name="total_price"  value="{{$precio_final_p}}" hidden>
@@ -119,35 +119,41 @@
                 </div>
                 <div class="col-8 card py-2 px-2 mx-2" style="height: 550px; overflow: auto; border-radius: 26px; border:; background: ; ">
                     <div class="col-12 text-center mt-2 mb-0">
-                        <h5 style="color: " class="py-0">Ingresa los datos de tu tarjeta</h5>
+                        <h5 style="color: " class="py-0">Asegurate de iniciar sesión en tu cuenta PayPal</h5>
                     </div>
                     <div class="col">
-                      
+
                         {{-- <div id="paypal-button-container"></div> --}}
                         <div class="panel">
-                
+
                             <div class="panel-body">
                                 <form action="{{ route('procesarPagoPayPal') }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="cant" value="{{ $cantidad_prods }}">
-                                    <input type="hidden" name="amount" value="{{ $formattedTotalPrice }}">
-                                    <button type="submit">
-                                        Pagar con PayPal
-                                    </button>
+                                    <div class="row">
+                                        <div class="col-12 text-center mt-5">
+                                            <input type="hidden" name="cant" value="{{ $cantidad_prods }}">
+                                            <input type="hidden" name="amount" value="{{ $formattedTotalPrice }}">
+                                            <button type="submit" class="btn">
+                                                <img src="{{ asset('img/design/checkout_paypal.png') }}" alt="" class="img-fluid w-100 text-center">
+                                            </button>
+                                            <img src="{{ asset('img/design/tarjetas_paypal.png') }}" alt="" class="img-fluid">
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
 
                     </div>
                 </div>
-            
+
             {{-- {{ dd($total_prod, $envio, $iva, $semitotal, $precio_final_p) }} --}}
     </div>
     {{-- {{ dd($precio_final_p) }} --}}
     @else
 
     <div class="container py-3 my-5" style="background: rgb(237, 237, 237); border-radius: 16px;">
-        <div class="col-12 text-center d-flex justify-content-center align-items-center flex-column">            
+        <div class="col-12 text-center d-flex justify-content-center align-items-center flex-column">
             <p class="mt-5" style="font-size: 4.5rem; font-family: 'Courier New', Courier, monospace; color: black;"><i class="fa-solid fa-cart-shopping fa-bounce"></i></p>
             <p class="mb-5" style="font-size: 4.5rem; font-family: 'Courier New', Courier, monospace; color: black;">Carrito vacio</p>
         </div>

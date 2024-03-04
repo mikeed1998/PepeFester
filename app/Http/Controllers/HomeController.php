@@ -81,8 +81,8 @@ class HomeController extends Controller
 		$userId = Auth::id();
 		$usuario = User::find($userId);
 		$pedido = Pedido::where('usuario',$userId)->get();
-		
-		
+
+
 		foreach ($pedido as $item) {
 			$fechaFormateada = $item->created_at->format('Y-m-d');
 			// Ahora $fechaFormateada contendrá la fecha en formato 'YYYY-MM-DD'
@@ -227,7 +227,7 @@ class HomeController extends Controller
 		}
 
 	// carrito
-		
+
 	public function addCard(Request $request){
 		// dd($request);
 		$cantidad = $request->cantidad;
@@ -239,8 +239,8 @@ class HomeController extends Controller
 			return redirect()->back()->with('error', 'Producto no encontrado');
 		}
 
-		$carrito = get('carrito', []);
-		
+        $carrito = session('carrito', []);
+
 		if (isset($carrito[$productoId])) {
 
 			if($carrito[$productoId]['existencias'] < $producto->existencias){
@@ -249,7 +249,7 @@ class HomeController extends Controller
 			}else{
 				\Toastr::error('Error, no hay mas stock disponible para agregar');
 			}
-			
+
 		} else {
 			$carrito[$productoId] = [
 				'id' => $producto->id,
@@ -263,13 +263,13 @@ class HomeController extends Controller
 			];
 			\Toastr::success('Agregado al carrito');
 		}
-	
-		put('carrito', $carrito);
+
+		session(['carrito' => $carrito]);
 		// dd($carrito);
 		if($request->comprar == 'Comprar ahora') {
 			return redirect()->route('miCarrito');
 		}
-	
+
 		return redirect()->back()->with('success', 'Producto agregado al carrito');
 	}
 
@@ -337,6 +337,10 @@ class HomeController extends Controller
 	}
 
 	public function proceso_datos(Request $request){
+        $cantidad_prods = session('cantidad_prods');
+
+        session(['cantidad_prods' => $request->cant_prods]);
+
 		$envio = session('envio');
 		if(!empty($envio)){
 			session()->put('envio', $request->envio);
@@ -353,7 +357,7 @@ class HomeController extends Controller
 				$producto->presentacion = $c['presentacion'];
 				$productos[]=$producto;
 			}
-	
+
 			$userId = Auth::id();
 			$user = User::find($userId);
 			$domicilio = Domicilio::where('user',$userId)->get()->first();
@@ -367,7 +371,7 @@ class HomeController extends Controller
 			$car = 1;
 			$pagina = 'proceso_pago';
 			$tipo_pago = $request->tipo_pago;
-			
+
 		return view('cart.micarritoDatos',compact('productos','user','car','domicilio','envio','pagina', 'tipo_pago'));
 
 	}
@@ -376,14 +380,14 @@ class HomeController extends Controller
 		$envio = session('envio');
 		$Carrito = session('carrito');
 		// dd($Carrito);
-		
+
 			foreach($Carrito  as $c){
 				$producto =  PFProductoPepes::find($c['id']);
 				$producto->catidad_total = $c['existencias'];
 				$producto->presentacion = $c['presentacion'];
 				$productos[]=$producto;
 			}
-			
+
 			$userId = Auth::id();
 			$user = User::find($userId);
 			$domicilio = Domicilio::where('user',$userId)->get()->first();
@@ -400,10 +404,11 @@ class HomeController extends Controller
 	}
 
 	public function pasarelaPagoPayPal(Request $request){
-		session('cantidad_pas', 0);
+        $cantidad_prods  = session('cantidad_prods');
+
 		$envio = session('envio');
 		$Carrito = session('carrito');
-		
+
 			foreach($Carrito  as $c){
 				$producto =  PFProductoPepes::find($c['id']);
 				$producto->catidad_total = $c['existencias'];
@@ -420,7 +425,8 @@ class HomeController extends Controller
 			$car = 1;
 			// dd($Carrito);
 			$pagina = 'pasarela_pago';
-			
+
+
 			// dd($Carrito);
 			// $envio = 0;
 		return view('cart.pasarelaPagoPayPal',compact('productos','user','car','domicilio','envio','pagina'));
@@ -451,7 +457,7 @@ class HomeController extends Controller
 		}
 	}
 
-	
+
 
 
 }
