@@ -26,10 +26,10 @@ class ConektaController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-    } 
+    }
 
     public function procesarPago(Request $request){
-        
+
         $userId = Auth::id();
         $usuario = User::find($userId);
         $domicilio = Domicilio::where('user',$userId )->get()->first();
@@ -48,7 +48,7 @@ class ConektaController extends Controller
                 'Authorization' => 'Bearer ' . config('services.conekta.secret_key'),
             ],
             'json' => [
-                "line_items" => [ 
+                "line_items" => [
                     [
                         "name" => "Pago Plataforma",
                         "unit_price" => $formattedTotalPrice,
@@ -76,7 +76,7 @@ class ConektaController extends Controller
         ]);
 
         $presentaciones = PFProductoPresentacionPepes::all();
-       
+
         $responseData = json_decode($response->getBody(), true);
         $Carrito = session('carrito');
         // dd($Carrito);
@@ -102,12 +102,12 @@ class ConektaController extends Controller
         // dd($Pedido);
         session()->forget('carrito');
         session()->forget('envio');
-    
+
         return response()->json(['success' => true, 'mensaje' => $responseData]);
-        
+
         dd($responseData);
 
     // Procesar la respuesta de Conekta y redirigir o mostrar resultados
 
-    }  
+    }
 }

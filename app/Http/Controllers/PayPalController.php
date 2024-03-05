@@ -28,9 +28,11 @@ class PayPalController extends Controller
     public function __construct() {
         $this->middleware('auth');
         $this->gateway = Omnipay::create('PayPal_Rest');
-        $this->gateway->setClientId('AUt5ZknCfLb_VZXRc2uKWeo4po11iWEW_J6n2ZZrrIY9Z-GuvqszEWBEx3l3m7e9k0Ogp4c0vsnoscps');
-        $this->gateway->setSecret('EHeTy6pXO3b59le1o1GLHrtA99wCuWk6EJYMCLOZoAVps6zwkkSThtYSyX-e7RXXSewD05nfhVuYu9GR');
-        $this->gateway->setTestMode(true);
+        // $this->gateway->setClientId('AUt5ZknCfLb_VZXRc2uKWeo4po11iWEW_J6n2ZZrrIY9Z-GuvqszEWBEx3l3m7e9k0Ogp4c0vsnoscps');
+        // $this->gateway->setSecret('EHeTy6pXO3b59le1o1GLHrtA99wCuWk6EJYMCLOZoAVps6zwkkSThtYSyX-e7RXXSewD05nfhVuYu9GR');
+        $this->gateway->setClientId('AZLJzCzJ5BF6tbrLH-Gn5HsLY5YF12M8hAToi8FY3NbVyGnFfnL5T6Rdu9tHqv0OG33BCybIUpNVvcm1');
+        $this->gateway->setSecret('EBWLAFlXRlnyS3EtsOEImrDJR3bQbW0xMaGIBENxCZwLWI0d9qswI_KwW9P7Ui_Ibgbnok_b2PAhjude');
+        $this->gateway->setTestMode(false);
     }
 
     public function procesarPagoPayPal(Request $request) {

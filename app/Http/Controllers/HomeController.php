@@ -399,7 +399,7 @@ class HomeController extends Controller
 			$car = 1;
 			// dd($Carrito);
 			$pagina = 'pasarela_pago';
-			// $envio = 0;
+			$envio = 0;
 		return view('cart.pasarelaPago',compact('productos','user','car','domicilio','envio','pagina'));
 	}
 
@@ -428,7 +428,7 @@ class HomeController extends Controller
 
 
 			// dd($Carrito);
-			// $envio = 0;
+			$envio = 0;
 		return view('cart.pasarelaPagoPayPal',compact('productos','user','car','domicilio','envio','pagina'));
 	}
 
